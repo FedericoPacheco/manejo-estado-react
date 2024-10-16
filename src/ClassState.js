@@ -1,11 +1,15 @@
 import React from 'react';
 
+const SECURITY_CODE = "Training";
+
 export class ClassState extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            error: true,
+            error: false,
             loading: false,
+            inputValue: "",
+            buttonWasPressed: false,
         }
     }
 
@@ -26,7 +30,11 @@ export class ClassState extends React.Component {
         if (this.state.loading) {
             setTimeout(() => {
                 console.log("setTimeout class");
-                this.setState({loading: false});
+                if (this.state.inputValue === SECURITY_CODE) {
+                    this.setState({buttonWasPressed: true, loading: false, error: false});
+                } else {
+                    this.setState({buttonWasPressed: true, loading: false, error: true});
+                }
             }, 2500);
         }
         console.log("componentDidUpdate finish");
@@ -40,11 +48,15 @@ export class ClassState extends React.Component {
     render() {
         return (
             <div>
-                <h2>Eliminar {this.props.name}</h2>
+                <h2>Verificador ({this.props.name})</h2>
                 <p>Por favor, escribe el código de seguridad.</p>
-                {this.state.error && <p>Error: el código es incorrecto</p>}
                 {this.state.loading && <p>Cargando...</p>}
-                <input placeholder = "Código de seguridad"/>
+                {!this.state.loading && this.state.buttonWasPressed && this.state.error && <p>Error: el código es incorrecto</p>}
+                {!this.state.loading && this.state.buttonWasPressed && !this.state.error && <p>Comprobación exitosa</p>}
+                <input
+                    onChange = {(e) => this.setState({buttonWasPressed: false, inputValue: e.target.value})}
+                    placeholder = "Código de seguridad"
+                />
                 <button
                     onClick = {() => this.setState({loading: true})}
                 >Comprobar</button>

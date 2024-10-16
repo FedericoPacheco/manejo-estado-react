@@ -17,9 +17,9 @@ Solución:
 function App() {
   return (
     <div className="App">
-      <UseState name = "Use State"/>
+      <UseState name = "UseState"/>
       <hr></hr>
-      <ClassState name = "Class State"/>
+      <ClassState name = "ClassState"/>
     </div>
   );
 }
