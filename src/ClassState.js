@@ -1,15 +1,15 @@
 import React from 'react';
-
-const SECURITY_CODE = "Training";
+import { START, CONFIRM, DELETE } from './App';
 
 export class ClassState extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            error: false,
-            loading: false,
-            inputValue: "",
-            buttonWasPressed: false,
+            current: START,
+            start_error: false,
+            start_loading: false,
+            start_verifying: false,
+            start_input: "",
         }
     }
 
@@ -27,13 +27,13 @@ export class ClassState extends React.Component {
     componentDidUpdate() {
         console.log("componentDidUpdate start");
         // Avoid infinite loops
-        if (this.state.loading) {
+        if (this.state.start_loading) {
             setTimeout(() => {
                 console.log("setTimeout class");
-                if (this.state.inputValue === SECURITY_CODE) {
-                    this.setState({buttonWasPressed: true, loading: false, error: false});
+                if (this.state.start_input === this.props.security_code) {
+                    this.setState({start_verifying: true, start_loading: false, start_error: false, current: CONFIRM});
                 } else {
-                    this.setState({buttonWasPressed: true, loading: false, error: true});
+                    this.setState({start_verifying: true, start_loading: false, start_error: true});
                 }
             }, 2500);
         }
@@ -46,21 +46,48 @@ export class ClassState extends React.Component {
     }
     
     render() {
-        return (
-            <div>
-                <h2>Verificador ({this.props.name})</h2>
-                <p>Por favor, escribe el código de seguridad.</p>
-                {this.state.loading && <p>Cargando...</p>}
-                {!this.state.loading && this.state.buttonWasPressed && this.state.error && <p>Error: el código es incorrecto</p>}
-                {!this.state.loading && this.state.buttonWasPressed && !this.state.error && <p>Comprobación exitosa</p>}
-                <input
-                    onChange = {(e) => this.setState({buttonWasPressed: false, inputValue: e.target.value})}
-                    placeholder = "Código de seguridad"
-                />
-                <button
-                    onClick = {() => this.setState({loading: true})}
-                >Comprobar</button>
-            </div>
-        ); 
+        if (this.state.current === START) {
+            return (
+                <div>
+                    <h2>Eliminador ({this.props.name})</h2>
+                    <p>Por favor, escribe el código de seguridad.</p>
+                    {this.state.start_loading && <p>Cargando...</p>}
+                    {!this.state.start_loading && this.state.start_verifying && this.state.start_error && <p>Error: el código es incorrecto</p>}
+                    {!this.state.start_loading && this.state.start_verifying && !this.state.start_error && <p>Comprobación exitosa</p>}
+                    <input 
+                        onChange = {(e) => {
+                            this.setState({start_input: e.target.value, start_verifying: false});
+                        }}
+                        placeholder = "Código de seguridad"
+                    />
+                    <button
+                        onClick = {() => this.setState({start_loading: true})}
+                    >Comprobar</button>
+                </div>
+            );
+        } else if (this.state.current === CONFIRM) {
+            return (
+                <div>
+                    <h2>Confirmar</h2>
+                    <p>¿Estás seguro?</p>
+                    <button
+                        onClick = {() => this.setState({current: DELETE})}
+                    >Sí</button>
+                    <button
+                        onClick = {() => this.setState({start_verifying: false, current: START})}
+                    >No</button>           
+                </div>
+            );
+        } else if (this.state.current === DELETE) {
+            return (
+                <div>
+                    <h2>Eliminado</h2>
+                    <p>¿Restaurar?</p>
+                    <button
+                        onClick = {() => this.setState({start_verifying: false, current: START})}
+                    >Ok</button>          
+                </div>
+            );
+        }    
     }
 }
