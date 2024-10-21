@@ -14,10 +14,14 @@ Solution:
   nvm use 16
 */
 
-const SECURITY_CODE_FUNC = "Serfe";
+const SECURITY_CODE_STATE = "Serfe";
 const SECURITY_CODE_CLASS = "Training";
+const SECURITY_CODE_REDUCER = "2024";
 
 export const START = "start";
+export const START_INPUT = "start_input";
+export const START_LOADING = "start_loading";
+export const START_ERROR = "start_error";
 export const CONFIRM = "confirm";
 export const DELETE = "delete";
 
@@ -26,7 +30,7 @@ function App() {
     <div className = "App">
       <UseState 
         name = "UseState"
-        security_code = {SECURITY_CODE_FUNC}
+        security_code = {SECURITY_CODE_STATE}
       />
       <hr></hr>
       <ClassState 
