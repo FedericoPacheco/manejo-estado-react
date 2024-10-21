@@ -1,5 +1,6 @@
 import { UseState } from './UseState.js';
 import { ClassState } from './ClassState.js';
+import { ReducerState } from './ReducerState.js';
 import './App.css';
 
 /*
@@ -37,7 +38,13 @@ function App() {
         name = "ClassState"
         security_code = {SECURITY_CODE_CLASS}
       />
+      <hr></hr>
+      <ReducerState 
+        name = "ReducerState"
+        security_code = {SECURITY_CODE_REDUCER}
+      />
     </div>
+    
   );
 }
 

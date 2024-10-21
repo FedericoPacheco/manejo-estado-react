@@ -61,8 +61,6 @@ export function UseState({ name, security_code }) {
         console.log("useEffect end")
     }, [onConfirm, onError, security_code, state]);
 
-    console.log(state);
-
     if (state.current.includes(START)) {
         return (
             <div>
